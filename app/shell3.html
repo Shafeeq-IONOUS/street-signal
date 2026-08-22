@@ -1,0 +1,739 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Street Signal Boston</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#071620; --panel:#0D2432; --panel2:#12303F; --sunk:#061119;
+  --ink:#EAF2F7; --ink2:#A8BFCE; --muted:#7891A3; --rule:#1B4056;
+  --blue:#37A2F0; --blue-bg:rgba(55,162,240,.14);
+  --p1:#FF5A47; --p2:#FFA229; --p3:#4FD1A5; --p4:#7C8FA3;
+  --gold:#FFC53D;
+  --fd:"Barlow Condensed",Impact,sans-serif; --fb:"Inter",system-ui,sans-serif;
+  --fm:"IBM Plex Mono",ui-monospace,monospace;
+}
+:root[data-theme="light"]{
+  --bg:#EEF2F5; --panel:#FFFFFF; --panel2:#F4F7F9; --sunk:#E2E8ED;
+  --ink:#091F2F; --ink2:#33475A; --muted:#5D7285; --rule:#CBD6DE;
+  --blue:#0B6FBF; --blue-bg:rgba(11,111,191,.10);
+  --p1:#CF2E1B; --p2:#B26A00; --p3:#0F7D5C; --p4:#6B7E8E;--gold:#A87400;
+}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  --bg:#EEF2F5; --panel:#FFFFFF; --panel2:#F4F7F9; --sunk:#E2E8ED;
+  --ink:#091F2F; --ink2:#33475A; --muted:#5D7285; --rule:#CBD6DE;
+  --blue:#0B6FBF; --blue-bg:rgba(11,111,191,.10);
+  --p1:#CF2E1B; --p2:#B26A00; --p3:#0F7D5C; --p4:#6B7E8E;--gold:#A87400;
+}}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--fb);font-size:15px;
+  line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+.gov{background:#091F2F;color:#fff;border-bottom:3px solid var(--p1);
+  font-family:var(--fd);font-size:12px;letter-spacing:.16em;padding:7px 16px;text-align:center}
+:root[data-theme="light"] .gov{background:#091F2F}
+
+.shell{display:grid;grid-template-columns:326px minmax(0,1fr);gap:14px;
+  max-width:1400px;margin:0 auto;padding:14px 16px 40px;align-items:start}
+@media(max-width:900px){.shell{grid-template-columns:1fr;padding:12px}}
+
+.panel{background:var(--panel);border:1px solid var(--rule);border-radius:14px}
+.ph{display:flex;justify-content:space-between;align-items:center;gap:8px;
+  padding:12px 14px;border-bottom:1px solid var(--rule)}
+.ph h2{font-family:var(--fd);font-size:19px;letter-spacing:.06em;margin:0;text-transform:uppercase}
+.ph span{font-family:var(--fm);font-size:10.5px;color:var(--muted);letter-spacing:.06em}
+
+/* ---------- player card ---------- */
+.me{padding:14px;display:flex;flex-direction:column;gap:11px}
+.merow{display:flex;align-items:center;gap:12px}
+.avatar{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--p3));
+  display:grid;place-items:center;font-family:var(--fd);font-size:22px;color:#04131C;flex:none}
+.rank{font-family:var(--fd);font-size:22px;letter-spacing:.04em;line-height:1}
+.rsub{font-family:var(--fm);font-size:11px;color:var(--muted)}
+.xpbar{height:8px;background:var(--sunk);border-radius:99px;overflow:hidden}
+.xpfill{height:100%;background:linear-gradient(90deg,var(--blue),var(--p3));border-radius:99px;
+  transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.st{background:var(--panel2);border:1px solid var(--rule);border-radius:9px;padding:8px 6px;text-align:center}
+.st b{display:block;font-family:var(--fd);font-size:21px;line-height:1.1;font-variant-numeric:tabular-nums}
+.st span{font-family:var(--fm);font-size:9px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+
+/* ---------- filters ---------- */
+.filters{display:flex;gap:5px;padding:10px 12px;flex-wrap:wrap;border-bottom:1px solid var(--rule)}
+.f{font-family:var(--fm);font-size:10.5px;letter-spacing:.06em;padding:5px 9px;border-radius:99px;
+  border:1px solid var(--rule);background:transparent;color:var(--ink2);cursor:pointer}
+.f i{width:8px;height:8px;border-radius:99px;display:inline-block;margin-right:5px;vertical-align:0}
+.f.on{background:var(--blue);border-color:var(--blue)!important;color:#04131C;font-weight:600}
+:root[data-theme="light"] .f.on{color:#fff}
+
+/* ---------- leaderboard ---------- */
+.board{max-height:min(56vh,540px);overflow-y:auto;padding:8px}
+@media(max-width:900px){.board{max-height:none}}
+.item{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:9px;align-items:center;
+  padding:9px 8px;border-radius:10px;cursor:pointer;border:1px solid transparent}
+.item:hover{background:var(--panel2);border-color:var(--rule)}
+.item.sel{background:var(--blue-bg);border-color:var(--blue)}
+.item:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.pos{font-family:var(--fd);font-size:17px;color:var(--muted);text-align:center}
+.item:nth-child(1) .pos,.item:nth-child(2) .pos,.item:nth-child(3) .pos{color:var(--gold)}
+.itxt{min-width:0}
+.ititle{font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.imeta{font-family:var(--fm);font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vote{display:flex;flex-direction:column;align-items:center;gap:1px;
+  border:1px solid var(--rule);border-radius:9px;padding:4px 8px;background:var(--panel2);
+  cursor:pointer;min-width:44px;color:var(--ink)}
+.vote:hover{border-color:var(--p3)}
+.vote.voted{background:var(--p3);border-color:var(--p3);color:#04131C}
+.vote b{font-family:var(--fd);font-size:15px;line-height:1;font-variant-numeric:tabular-nums}
+.vote i{font-style:normal;font-size:9px;line-height:1}
+.cdot{width:8px;height:8px;border-radius:99px;display:inline-block;margin-right:5px;vertical-align:0}
+.pill{font-family:var(--fm);font-size:9px;padding:2px 5px;border-radius:4px;font-weight:500}
+.t1{background:rgba(255,90,71,.18);color:var(--p1)}
+.t2{background:rgba(255,162,41,.18);color:var(--p2)}
+.t3{background:rgba(79,209,165,.16);color:var(--p3)}
+.t4{background:rgba(124,143,163,.18);color:var(--p4)}
+
+/* ---------- map ---------- */
+#map{height:min(66vh,620px);border-radius:14px 14px 0 0;background:var(--sunk);position:relative;overflow:hidden}
+#map canvas{display:block;width:100%;height:100%;cursor:grab}
+.maphud{position:absolute;left:12px;top:12px;z-index:3;font-family:var(--fm);font-size:10.5px;
+  color:var(--ink2);background:rgba(6,17,25,.72);border:1px solid var(--rule);border-radius:8px;padding:7px 10px;line-height:1.7}
+:root[data-theme="light"] .maphud{background:rgba(255,255,255,.85)}
+@media(max-width:900px){#map{height:min(52vh,420px)}}
+  border:1px solid var(--rule)}
+.mapfoot{display:flex;gap:10px 14px;flex-wrap:wrap;padding:9px 14px;border-top:1px solid var(--rule);
+  font-family:var(--fm);font-size:10.5px;color:var(--muted);align-items:center}
+#l_maphint{margin-left:auto;padding-left:14px;color:var(--blue)}
+.key{display:inline-flex;align-items:center;gap:5px}
+.key i{width:9px;height:9px;border-radius:99px;display:inline-block}
+
+/* ---------- ask ---------- */
+.ask{padding:14px;display:flex;flex-direction:column;gap:10px}
+textarea{width:100%;min-height:52px;resize:none;border:1px solid var(--rule);border-radius:10px;
+  background:var(--sunk);color:var(--ink);font-family:var(--fb);font-size:15.5px;padding:11px 12px;outline:none}
+textarea:focus{border-color:var(--blue)}
+textarea::placeholder{color:var(--muted)}
+button{font-family:var(--fb);font-size:14px;font-weight:600;border-radius:10px;cursor:pointer;
+  border:1px solid var(--rule);background:var(--panel2);color:var(--ink);padding:10px 14px;min-height:42px}
+button:hover{border-color:var(--blue)}
+button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.primary{background:var(--blue);border-color:var(--blue);color:#04131C;flex:1}
+:root[data-theme="light"] .primary{color:#fff}
+.row{display:flex;gap:8px;min-width:0}
+.chips{display:flex;gap:6px;overflow-x:auto;min-width:0;max-width:100%;padding-bottom:2px}
+.chip{white-space:nowrap;font-size:12.5px;padding:7px 11px;border-radius:99px;min-height:0;
+  background:transparent;color:var(--ink2)}
+
+.rails{display:flex;gap:6px;padding:0 14px 12px}
+.rail{flex:1;border:1px solid var(--rule);border-radius:9px;padding:7px 8px;background:var(--panel2)}
+.rail b{display:block;font-family:var(--fm);font-size:8.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted)}
+.rail i{font-style:normal;font-size:11.5px;color:var(--ink2)}
+.rail.pass{border-color:var(--p3)} .rail.pass i{color:var(--p3)}
+.rail.stop{border-color:var(--p1)} .rail.stop i{color:var(--p1)}
+
+.ans{margin:0 14px 14px;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:var(--panel2)}
+.tierbar{padding:8px 13px;font-family:var(--fm);font-size:10.5px;letter-spacing:.09em;
+  text-transform:uppercase;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.abody{padding:15px 13px;display:flex;flex-direction:column;gap:12px}
+.lede{font-family:var(--fd);font-size:25px;line-height:1.2;letter-spacing:.01em}
+.lede em{font-style:normal;color:var(--blue)}
+.sub{margin:0;font-size:14.5px;color:var(--ink2)}
+details{border-top:1px solid var(--rule);padding-top:10px}
+summary{cursor:pointer;font-weight:600;font-size:14px;list-style:none;display:flex;
+  justify-content:space-between;align-items:center;padding:2px 0}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:var(--fm);color:var(--muted)}
+details[open] summary::after{content:"–"}
+.dbody{padding:8px 0 2px;font-size:14px;color:var(--ink2);display:flex;flex-direction:column;gap:9px}
+.cites{display:flex;flex-wrap:wrap;gap:5px}
+.cite{font-family:var(--fm);font-size:11px;padding:3px 7px;border-radius:5px;border:1px solid var(--rule);
+  background:var(--sunk);color:var(--ink2);text-decoration:none}
+.cite:hover{color:var(--blue);border-color:var(--blue)}
+.prov{font-family:var(--fm);font-size:10px;line-height:1.7;color:var(--muted);
+  padding:10px 13px;border-top:1px solid var(--rule);background:var(--sunk)}
+.acts{display:flex;gap:7px;padding:0 13px 13px;flex-wrap:wrap}
+.acts button{flex:1;min-width:110px}
+.bars{display:flex;flex-direction:column;gap:6px}
+.brow{display:grid;grid-template-columns:90px minmax(0,1fr) 40px;gap:8px;align-items:center;font-size:12.5px}
+.btrack{height:13px;background:var(--sunk);border-radius:3px;overflow:hidden}
+.bfill{height:100%;border-radius:0 3px 3px 0;background:var(--blue)}
+.bfill.flag{background:var(--p1)}
+.bval{font-family:var(--fm);font-size:11.5px;text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---------- report form ---------- */
+.report{padding:13px;display:none;flex-direction:column;gap:9px;border-top:1px solid var(--rule)}
+.report.open{display:flex}
+select,input[type=text]{width:100%;background:var(--sunk);color:var(--ink);border:1px solid var(--rule);
+  border-radius:9px;padding:10px 11px;font-family:var(--fb);font-size:14.5px;outline:none}
+select:focus,input:focus{border-color:var(--blue)}
+label{font-family:var(--fm);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:22px;background:var(--p3);color:#04131C;
+  font-weight:700;padding:11px 18px;border-radius:99px;z-index:9999;font-size:14px;
+  box-shadow:0 8px 24px rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .25s,bottom .25s}
+.toast.show{opacity:1;bottom:32px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px 0;
+  max-width:1400px;margin:0 auto}
+.brand{font-family:var(--fd);font-size:27px;letter-spacing:.03em;text-transform:uppercase}
+.brand span{color:var(--p1)}
+.tools{display:flex;gap:5px}
+.tools button{padding:7px 10px;min-height:34px;font-family:var(--fm);font-size:11px}
+.tools button.on{background:var(--blue);border-color:var(--blue);color:#04131C}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="gov">CITY OF BOSTON OPEN DATA · UNOFFICIAL COMMUNITY TOOL</div>
+<div class="topbar">
+  <div class="brand">Street <span>Signal</span></div>
+  <div class="tools">
+    <button class="lang on" data-lang="en" aria-pressed="true">EN</button>
+    <button class="lang" data-lang="es" aria-pressed="false">ES</button>
+    <button id="theme" aria-label="Switch theme">◐</button>
+  </div>
+</div>
+
+<div class="shell">
+  <!-- ============ LEFT: dashboard ============ -->
+  <aside style="display:flex;flex-direction:column;gap:14px">
+    <section class="panel">
+      <div class="ph"><h2 id="l_you">Your standing</h2><span id="l_nb">Boston</span></div>
+      <div class="me">
+        <div class="merow">
+          <div class="avatar" id="av">BR</div>
+          <div style="min-width:0">
+            <div class="rank" id="rankname">Block Watcher</div>
+            <div class="rsub"><span id="xpnow">0</span> / <span id="xpnext">50</span> civic points</div>
+          </div>
+        </div>
+        <div class="xpbar"><div class="xpfill" id="xpfill" style="width:0%"></div></div>
+        <div class="stats3">
+          <div class="st"><b id="s_votes">0</b><span id="l_backed">Backed</span></div>
+          <div class="st"><b id="s_reports">0</b><span id="l_filed">Filed</span></div>
+          <div class="st"><b id="s_streak">0</b><span id="l_streak">Streak</span></div>
+        </div>
+        <button class="primary" id="openReport" style="width:100%">+ <span id="l_report">Report an issue</span></button>
+      </div>
+      <div class="report" id="reportForm">
+        <label for="r_type" id="l_what">What's happening</label>
+        <select id="r_type"></select>
+        <div id="freeWrap" style="display:none;flex-direction:column;gap:6px">
+          <label for="r_free" id="l_desc">Describe it in your own words</label>
+          <textarea id="r_free" rows="2" placeholder="e.g. the back alley is piled with bags and it smells"></textarea>
+          <div id="r_guess" style="font-family:var(--fm);font-size:10.5px;color:var(--muted)"></div>
+        </div>
+        <label for="r_street" id="l_where">Street</label>
+        <input type="text" id="r_street" placeholder="e.g. 328 Dartmouth St">
+        <div class="row">
+          <button id="r_cancel" style="flex:1" >Cancel</button>
+          <button class="primary" id="r_submit">Submit</button>
+        </div>
+        <p style="margin:0;font-family:var(--fm);font-size:10px;color:var(--muted);line-height:1.6">
+          Stays on this device. This is a community signal, not a filing with the City —
+          real reports go to 311.
+        </p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="ph"><h2 id="l_board">Priority board</h2><span id="boardcount">120</span></div>
+      <div class="filters" id="filters"></div>
+      <div class="board" id="board" role="list"></div>
+      <div class="prov" id="l_boardnote">Ranked by consequence, not volume — a crowd of parking
+        tickets never outranks a hazard. Upvotes move an item up.</div>
+    </section>
+  </aside>
+
+  <!-- ============ RIGHT: map + ask ============ -->
+  <main style="display:flex;flex-direction:column;gap:14px;min-width:0">
+    <section class="panel" style="overflow:hidden">
+      <div id="map"><div class="maphud">DRAG to orbit · SCROLL to zoom<br>PIN HEIGHT = PRIORITY · RING = HOW MANY NEIGHBOURS</div></div>
+      <div class="mapfoot">
+        <span id="legend" style="display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center"></span>
+        <span id="l_maphint">Click a pillar to open it</span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="ph"><h2 id="l_ask">Ask about your street</h2><span>311 + PROPERTY</span></div>
+      <div class="ask">
+        <label class="sr" for="q">Ask about your street</label>
+        <textarea id="q" rows="2"></textarea>
+        <div class="row">
+          <button id="mic" aria-pressed="false">🎙 <span id="l_speak">Speak</span></button>
+          <button class="primary" id="askBtn">Ask</button>
+        </div>
+        <div class="chips" id="chips"></div>
+      </div>
+      <div class="rails" id="rails"></div>
+      <div id="out"></div>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>__THREE__</script>
+<script>__ORBIT__</script>
+<script>__CATS__</script>
+<script>__MAP3D__</script>
+<script>
+const CARDS=__CORPUS__, PARCELS=__PROPERTY__, HOODS=__HOODS__, SEED=__SEED__;
+
+/* ---------------------------------------------------------------------------
+   Language
+--------------------------------------------------------------------------- */
+let LANG="en";
+const STR={
+ en:{ph:"e.g. there are rats behind my building on 328 Dartmouth St",ask:"Ask",speak:"Speak",
+  read:"🔊 Read aloud",share:"Share",record:"What the record shows",where:"Where",
+  ctx:"About this street",check:n=>`Check it — ${n} case IDs`,cant:"What I can't tell you",
+  idk:"I don't know",nores:"no search performed",floor:"nothing matched closely enough",
+  ok:"General information",flag:"Worth pushing on",src:n=>`${n} sources`,
+  cantb:"I only see what was reported to 311 and how the city closed it. I can't tell you whether the problem is actually gone, or anything about who lives or owns property at an address. “Resolved” is the city's word, not a check I made.",
+  citen:"Each opens the city's own record.",
+  parcel:p=>`${p.p} properties here. The typical one was built in ${p.yr||"—"}, and ${p.oo}% are owner-occupied — so ${100-p.oo}% are rented or owned by someone living elsewhere.`,
+  psrc:"From Property Assessment — the city's parcel record.",
+  prov:"Built from City of Boston 311 Service Requests (2025 · 267,187 records · through 31 Dec 2025) and Property Assessment. Resident reports counted separately from city-logged ones. Local index — no open web.",
+  you:"Your standing",board:"Priority board",report:"Report an issue",what:"What's happening",
+  wheres:"Street",backed:"Backed",filed:"Filed",streak:"Streak",askh:"Ask about your street",
+  maphint:"Click any pin",voted:"Backed — +5 points",filedok:"Reported — +15 points",
+  needstreet:"Add a street first",needdesc:"Describe it first",cmp:"Compare citywide",who:"Who handles this?",
+  ranks:["Neighbour","Block Watcher","Street Captain","Ward Voice","City Advocate"]},
+ es:{ph:"ej. hay ratas detrás de mi edificio en 328 Dartmouth St",ask:"Preguntar",speak:"Hablar",
+  read:"🔊 Leer",share:"Compartir",record:"Lo que dice el registro",where:"Dónde",
+  ctx:"Sobre esta calle",check:n=>`Compruébalo — ${n} casos`,cant:"Lo que no puedo decirte",
+  idk:"No lo sé",nores:"no se buscó nada",floor:"nada coincidió lo suficiente",
+  ok:"Información general",flag:"Vale la pena insistir",src:n=>`${n} fuentes`,
+  cantb:"Solo veo lo que se reportó al 311 y cómo la ciudad cerró el caso. No puedo decirte si el problema se resolvió de verdad, ni nada sobre quién vive o es dueño de una propiedad. “Resuelto” es la palabra de la ciudad, no una comprobación mía.",
+  citen:"Cada uno abre el registro oficial.",
+  parcel:p=>`${p.p} propiedades aquí. La típica se construyó en ${p.yr||"—"}, y el ${p.oo}% son ocupadas por sus dueños — el ${100-p.oo}% se alquilan.`,
+  psrc:"De Property Assessment — el registro municipal de parcelas.",
+  prov:"Construido con 311 Service Requests (2025 · 267,187 registros) y Property Assessment de la Ciudad de Boston. Búsqueda local — sin web abierta.",
+  you:"Tu posición",board:"Tablero de prioridad",report:"Reportar",what:"Qué pasa",
+  wheres:"Calle",backed:"Apoyos",filed:"Enviados",streak:"Racha",askh:"Pregunta sobre tu calle",
+  maphint:"Haz clic en un pin",voted:"Apoyado — +5 puntos",filedok:"Reportado — +15 puntos",
+  needstreet:"Añade una calle",needdesc:"Descríbelo primero",cmp:"Comparar ciudad",who:"¿Quién se encarga?",
+  ranks:["Vecino","Vigilante","Capitán","Voz del Barrio","Defensor"]}};
+const T=()=>STR[LANG];
+
+/* ---------------------------------------------------------------------------
+   Local player state. Everything lives on this device — no account, no server.
+--------------------------------------------------------------------------- */
+const KEY="streetsignal.v1";
+let ME=JSON.parse(localStorage.getItem(KEY)||'null')||{votes:{},reports:[],points:0,streak:0,last:null};
+const save=()=>localStorage.setItem(KEY,JSON.stringify(ME));
+
+const TIER_NAME={1:"P1",2:"P2",3:"P3",4:"P4"};
+const TIER_COLOR=t=>getComputedStyle(document.documentElement).getPropertyValue("--p"+t).trim()||"#888";
+
+/* Live list = the seeded real incidents plus anything reported on this device. */
+function allItems(){
+  return SEED.concat(ME.reports).map(x=>({
+    ...x, cat:catOf(x.t), votes:(ME.votes[x.id]?1:0)+(x.base!==undefined?x.base:x.r),
+    rank: x.sc + (ME.votes[x.id]?1:0)*8
+  }));
+}
+
+function rankTitle(){
+  const p=ME.points, r=T().ranks;
+  return p<50?r[0]:p<150?r[1]:p<350?r[2]:p<700?r[3]:r[4];
+}
+function nextXP(){const p=ME.points;return p<50?50:p<150?150:p<350?350:p<700?700:1200;}
+
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg; t.classList.add("show");
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),1900);
+}
+
+/* ---------------------------------------------------------------------------
+   Map — Leaflet with no tile layer. Boston is drawn from the city's own
+   neighbourhood GeoJSON, so the map needs no network and no tile server.
+--------------------------------------------------------------------------- */
+function initMap(){
+  M3.init(document.getElementById("map"), HOODS, visible(), id=>select(id));
+}
+const drawMarkers = () => M3.update(visible());
+
+/* ---------------------------------------------------------------------------
+   Board
+--------------------------------------------------------------------------- */
+let FILTER="all", SELECTED=null;
+function visible(){
+  let xs=allItems();
+  if(FILTER==="mine") xs=xs.filter(x=>ME.votes[x.id]||x.mine);
+  else if(FILTER!=="all") xs=xs.filter(x=>x.cat===FILTER);
+  return xs.sort((a,b)=>b.rank-a.rank).slice(0,60);
+}
+
+function renderFilters(){
+  const el=document.getElementById("filters");
+  el.innerHTML=[["all",LANG==="es"?"TODO":"ALL",null]]
+    .concat(CATS.map(c=>[c.k,(LANG==="es"?(c.shortEs||c.es):(c.short||c.en)).toUpperCase(),catColor(c.k)]))
+    .concat([["mine",LANG==="es"?"MÍOS":"MINE",null]])
+    .map(([k,lab,col])=>`<button class="f ${FILTER===k?"on":""}" data-f="${k}"
+      ${col?`style="border-color:${col}"`:""}>${col?`<i style="background:${col}"></i>`:""}${lab}</button>`).join("");
+  el.querySelectorAll(".f").forEach(b=>b.onclick=()=>{
+    FILTER=b.dataset.f; renderFilters(); renderBoard(); drawMarkers();
+  });
+}
+function renderBoard(){
+  const xs=visible(), el=document.getElementById("board");
+  document.getElementById("boardcount").textContent=xs.length;
+  el.innerHTML=xs.map((it,i)=>`
+    <div class="item ${SELECTED===it.id?"sel":""}" role="listitem" tabindex="0" data-id="${it.id}">
+      <div class="pos">${i+1}</div>
+      <div class="itxt">
+        <div class="ititle">${it.mine?"⚑ ":""}${it.t}</div>
+        <div class="imeta"><span class="cdot" style="background:${catColor(it.cat)}"></span><span class="pill t${it.p}">${TIER_NAME[it.p]}</span> ${it.s} · ${it.r} res${it.m?` · ${it.m} ignored`:""}</div>
+      </div>
+      <button class="vote ${ME.votes[it.id]?"voted":""}" data-vote="${it.id}"
+        aria-label="Back this issue"><b>▲</b><i>${it.votes}</i></button>
+    </div>`).join("");
+  el.querySelectorAll("[data-vote]").forEach(b=>b.onclick=e=>{e.stopPropagation();vote(b.dataset.vote);});
+  el.querySelectorAll(".item").forEach(d=>{
+    d.onclick=()=>select(d.dataset.id);
+    d.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();select(d.dataset.id);}};
+  });
+}
+function vote(id){
+  if(ME.votes[id]){ delete ME.votes[id]; ME.points=Math.max(0,ME.points-5); }
+  else{
+    ME.votes[id]=1; ME.points+=5;
+    const today=new Date().toISOString().slice(0,10);
+    if(ME.last!==today){ ME.streak+=1; ME.last=today; }
+    toast(T().voted);
+  }
+  save(); renderMe(); renderBoard(); drawMarkers();
+}
+function select(id){
+  SELECTED=id; renderBoard();
+  const it=allItems().find(x=>x.id===id); if(!it) return;
+  M3.focus(id);
+  ask(`${it.t} on ${it.s}`);
+}
+
+function renderMe(){
+  document.getElementById("s_votes").textContent=Object.keys(ME.votes).length;
+  document.getElementById("s_reports").textContent=ME.reports.length;
+  document.getElementById("s_streak").textContent=ME.streak;
+  document.getElementById("rankname").textContent=rankTitle();
+  document.getElementById("xpnow").textContent=ME.points;
+  document.getElementById("xpnext").textContent=nextXP();
+  document.getElementById("xpfill").style.width=Math.min(100,ME.points/nextXP()*100)+"%";
+  document.getElementById("av").textContent=rankTitle().split(" ").map(w=>w[0]).join("").slice(0,2);
+}
+
+/* ---------------------------------------------------------------------------
+   Reporting
+--------------------------------------------------------------------------- */
+const P1=new Set(["Sidewalk Repair (Make Safe)","Traffic Signal Inspection","Unshoveled Sidewalk","Pick up Dead Animal","Needle Pickup"]);
+const P2=new Set(["Rodent Activity","Pest Infestation - Residential","Poor Conditions of Property","Contractor Complaints","Encampments"]);
+const P4=new Set(["Request for Recycling Cart","Sticker Request","Recycling Cart Return"]);
+const tierOf=t=>P1.has(t)?1:P2.has(t)?2:P4.has(t)?4:3;
+
+/* The city's own list runs to 155 codes, most of them near-duplicates
+   ("Pothole" and "Request for Pothole Repair" are the same thing to a resident).
+   These are the eight things people actually report, each mapped to the code
+   311 files it under, so the record stays compatible with the city's data. */
+const REPORT_KINDS = [
+  {k:"pests",   en:"Rats, mice or pests",              es:"Ratas, ratones o plagas",        t:"Rodent Activity"},
+  {k:"trash",   en:"Trash, dumping or a dirty street", es:"Basura o vertidos",              t:"Improper Storage of Trash (Barrels)"},
+  {k:"walk",    en:"Broken sidewalk, road or pothole", es:"Acera o calle rota",             t:"Sidewalk Repair (Make Safe)"},
+  {k:"light",   en:"Street light, sign or signal",     es:"Farola, señal o semáforo",       t:"Traffic Signal Inspection"},
+  {k:"snow",    en:"Snow or ice not cleared",          es:"Nieve o hielo sin limpiar",      t:"Unshoveled Sidewalk"},
+  {k:"home",    en:"Housing — mould, heat, leaks",     es:"Vivienda — moho, calefacción",   t:"Poor Conditions of Property"},
+  {k:"car",     en:"Parking or an abandoned vehicle",  es:"Estacionamiento o vehículo",     t:"Parking Enforcement"},
+  {k:"other",   en:"Something else — I'll describe it",es:"Otra cosa — lo describo",        t:null},
+];
+
+function fillTypes(){
+  const sel=document.getElementById("r_type");
+  sel.innerHTML=REPORT_KINDS.map(r=>`<option value="${r.k}">${LANG==="es"?r.es:r.en}</option>`).join("");
+  sel.onchange=()=>{
+    const free = sel.value==="other";
+    document.getElementById("freeWrap").style.display = free?"flex":"none";
+    document.getElementById("r_guess").textContent="";
+  };
+}
+
+/* Free text → a category. Granite does it when it is reachable (it runs on this
+   machine, so nothing leaves the laptop); otherwise the same keyword router the
+   search uses takes over. Either way the result is one of the eight above —
+   the model picks a label, it never writes the record. */
+async function classifyFreeText(text){
+  const labels=REPORT_KINDS.filter(r=>r.t).map(r=>r.k);
+  try{
+    const res=await fetch("http://localhost:11434/api/generate",{
+      method:"POST", headers:{"Content-Type":"application/json"},
+      signal:AbortSignal.timeout(9000),
+      body:JSON.stringify({model:"granite3.1-dense:8b", stream:false, options:{temperature:0},
+        prompt:`Classify this neighbourhood complaint into exactly one label.\nLabels: ${labels.join(", ")}\nComplaint: "${text}"\nAnswer with the single label word only.`})
+    });
+    if(res.ok){
+      const out=(await res.json()).response.toLowerCase();
+      const hit=labels.find(l=>out.includes(l));
+      if(hit) return {k:hit, by:"Granite 3.1 (on this machine)"};
+    }
+  }catch(e){ /* offline or blocked — fall through */ }
+  const f=deriveFilters(text);
+  if(f.title){
+    const m=REPORT_KINDS.find(r=>r.t===f.title);
+    if(m) return {k:m.k, by:"keyword match"};
+  }
+  return {k:"trash", by:"no clear match — defaulted"};
+}
+
+async function submitReport(){
+  const sel=document.getElementById("r_type");
+  const st=document.getElementById("r_street").value.trim();
+  if(!st){ toast(T().needstreet); return; }
+
+  let kind=sel.value;
+  if(kind==="other"){
+    const text=document.getElementById("r_free").value.trim();
+    if(!text){ toast(T().needdesc); return; }
+    const g=document.getElementById("r_guess");
+    g.textContent=LANG==="es"?"Clasificando…":"Working out what this is…";
+    const res=await classifyFreeText(text);
+    kind=res.k;
+    const label=REPORT_KINDS.find(r=>r.k===kind);
+    g.textContent=`→ ${LANG==="es"?label.es:label.en}  ·  ${res.by}`;
+  }
+
+  const t=REPORT_KINDS.find(r=>r.k===kind).t;
+  const match=CARDS.find(c=>c.k===0&&norm(c.s)===norm(st))||CARDS.find(c=>c.k===0&&norm(c.s).includes(norm(st)));
+  const p=tierOf(t);
+  ME.reports.push({id:"mine::"+Date.now(),s:st,t:t,d:match?match.d:"",r:1,y:0,m:0,o:1,n:1,
+    g:match?match.g:SEED[0].g,p:p,sc:{1:70,2:56,3:20,4:8}[p],c:[],mine:true,base:1});
+  ME.points+=15; save();
+  document.getElementById("r_street").value="";
+  document.getElementById("r_free").value="";
+  setTimeout(()=>document.getElementById("reportForm").classList.remove("open"),700);
+  toast(T().filedok); renderMe(); renderBoard(); drawMarkers();
+}
+
+/* ===========================================================================
+   RETRIEVAL — unchanged discipline: classify, filter at source, two stages,
+   sensitivity gate, score floor, claims bound to counted fields.
+=========================================================================== */
+const PERSONAL=/\b(phone number|email|who lives|owner'?s name|address of|tenant|social security|ssn)\b/i;
+const IN_SCOPE=/\b(rat|rats|rodent|mice|mouse|pest|roach|trash|garbage|pothole|sidewalk|snow|shovel|graffiti|noise|parking|street ?clean|dead animal|needle|tree|light|sign|dumping|cart|recycl|inspect|abandoned|encampment|repair|fix|complain|report|condition|property|traffic|signal|litter|basket|animal|activity|infestation)\b/i;
+function classify(q){
+  if(!q.trim()) return {ok:false,why:"empty",msg:"Ask a question first."};
+  if(PERSONAL.test(q)) return {ok:false,why:"personal",
+    msg:LANG==="es"?"Eso pide información sobre una persona concreta. No voy a buscar eso."
+      :"That's asking for information about a specific person. 311 records aren't the place to look that up, and I won't search for it."};
+  if(!IN_SCOPE.test(q)) return {ok:false,why:"scope",
+    msg:LANG==="es"?"Solo sé lo que el 311 de Boston registró en 2025. No tengo una fuente fiable para eso."
+      :"I only know what Boston's 311 service requests recorded in 2025. I don't have a source I trust for that."};
+  return {ok:true};
+}
+const TOPICS=[[/\b(rat|rats|rodent|mice|mouse)\b/i,"Rodent Activity"],
+ [/\b(pest|roach|cockroach|bedbug|infest)\b/i,"Pest Infestation - Residential"],
+ [/\bpothole\b/i,"Request for Pothole Repair"],[/\bsidewalk\b/i,"Sidewalk Repair (Make Safe)"],
+ [/\b(snow|shovel|unshovel|ice)\b/i,"Unshoveled Sidewalk"],
+ [/\b(trash|garbage|barrel|rubbish)\b/i,"Improper Storage of Trash (Barrels)"],
+ [/\bgraffiti\b/i,"Graffiti Removal"],[/\b(traffic|signal)\b/i,"Traffic Signal Inspection"],
+ [/\bpark(ing)?\b/i,"Parking Enforcement"],[/\b(street ?clean|sweep)\b/i,"Requests for Street Cleaning"],
+ [/\b(dead animal)\b/i,"Pick up Dead Animal"],[/\bneedle\b/i,"Needle Pickup"],
+ [/\b(dump|dumping)\b/i,"Illegal Dumping"],[/\bencampment\b/i,"Encampments"],
+ [/\b(landlord|condition|mold|heat|leak|property)\b/i,"Poor Conditions of Property"]];
+const STREET_RE=/\b((?:INTERSECTION\s+)?(?:\d+[-\da-z]*\s+)?[A-Z][A-Za-z.]*(?:\s+[A-Z][A-Za-z.]*)?\s+(?:St|Street|Ave|Avenue|Rd|Road|Ln|Lane|Dr|Drive|Blvd|Way|Ct|Pl|Ter|Sq|Row|Park|Hwy|Whf)\.?)\b/;
+function deriveFilters(q){
+  const t=TOPICS.find(x=>x[0].test(q));
+  const m=q.match(STREET_RE);
+  return {title:t?t[1]:null, street:m?m[1].replace(/\.$/,"").trim():null};
+}
+const norm=s=>(s||"").toLowerCase().replace(/[.,]/g,"").replace(/\s+/g," ").trim();
+function retrieve(f){
+  let category=null,street=null;
+  if(f.title) category=CARDS.find(c=>c.k===1&&c.t===f.title)||null;
+  if(f.street){
+    const want=norm(f.street);
+    const pool=CARDS.filter(c=>c.k===0&&(!f.title||c.t===f.title));
+    const exact=pool.find(c=>norm(c.s)===want);
+    if(exact) street={...exact,approx:false};
+    else{
+      const near=pool.filter(c=>norm(c.s).includes(want)||want.includes(norm(c.s))).sort((a,b)=>b.r-a.r);
+      if(near.length) street={...near[0],approx:true,alts:near.length};
+    }
+  }
+  return {category,street};
+}
+const gate=(hit,f)=>hit.street&&hit.street.x===1&&!f.street;
+function parcelFor(street){
+  if(!street) return null;
+  const up=street.toUpperCase().replace(/^INTERSECTION /,"").replace(/^[0-9-]+\s+/,"").split(" & ")[0].trim();
+  return PARCELS[up]||null;
+}
+function buildAnswer(hit,f){
+  const s=hit.street,c=hit.category,es=LANG==="es",out=[];
+  if(s){
+    const t=s.t.toLowerCase();
+    out.push({lede:s.r>0
+      ?(es?`No — <em>${s.r} ${s.r===1?"residente":"residentes"}</em> reportaron ${t} en ${s.s} en 2025.`
+          :`No — <em>${s.r} ${s.r===1?"resident":"residents"}</em> reported ${t} on ${s.s} in 2025.`)
+      :(es?`Ningún residente reportó ${t} en ${s.s} — los ${s.n} registros vienen del personal.`
+          :`No resident filed a ${t} report on ${s.s} — the ${s.n} on record all came from city staff.`)});
+    if(s.approx) out.push({flag:1,text:es?`Es la coincidencia más cercana a “${f.street}” — verifica la dirección.`
+      :`That's the closest match I have to “${f.street}”${s.alts>1?` of ${s.alts} nearby`:""} — check the address before relying on it.`});
+    if(s.y>0) out.push({text:es?`La ciudad registró ${s.y} más por su cuenta.`:`The city logged ${s.y} more itself.`});
+    if(s.d) out.push({text:es?`${s.d} se encarga de esto.`:`${s.d} is the department that handles these.`});
+    if(s.m>0) out.push({flag:1,text:es?`${s.m} casos se cerraron como “solo anotado” — sin arreglo.`
+      :`${s.m} of the cases there closed as “noted only” — recorded, with no fix logged.`});
+    if(s.o>0) out.push({text:es?`${s.o} ${s.o===1?"sigue abierto":"siguen abiertos"}.`:`${s.o} ${s.o===1?"is":"are"} still open.`});
+  }else if(c){
+    out.push({lede:es?`No tengo registros de calle, pero en la ciudad hubo <em>${c.n.toLocaleString()}</em> reportes de ${c.t.toLowerCase()} en 2025.`
+      :`I don't have street-level records for that, but citywide there were <em>${c.n.toLocaleString()}</em> ${c.t.toLowerCase()} reports in 2025.`});
+    if(c.d) out.push({text:es?`${c.d} se encarga.`:`${c.d} handles them.`});
+  }
+  return out;
+}
+function bars(c){
+  if(!c) return "";
+  const rows=[["Residents",c.r,0],["City staff",c.y,0],["Noted only",c.m,1],["Still open",c.o,1]].filter(r=>r[1]>0);
+  const mx=Math.max(...rows.map(r=>r[1]),1);
+  return `<div class="bars" role="img" aria-label="${rows.map(r=>r[0]+" "+r[1]).join(", ")}">`+
+    rows.map(([l,v,f])=>`<div class="brow"><span>${l}</span><span class="btrack">
+      <span class="bfill${f?" flag":""}" style="width:${Math.round(v/mx*100)}%"></span></span>
+      <span class="bval">${v}</span></div>`).join("")+`</div>`;
+}
+const rail=(a,b,c)=>[a,b,c].map(x=>`<div class="rail ${x.st}"><b>${x.tag}</b><i>${x.lab}</i></div>`).join("");
+let LAST=null;
+
+function ask(q){
+  document.getElementById("q").value=q;
+  const R=document.getElementById("rails"), O=document.getElementById("out");
+  const v=classify(q);
+  if(!v.ok){
+    R.innerHTML=rail({tag:"① Input",lab:v.why==="personal"?"blocked":"out of scope",st:"stop"},
+      {tag:"② Retrieval",lab:"never ran",st:""},{tag:"③ Output",lab:"refused",st:"stop"});
+    O.innerHTML=`<div class="ans"><div class="tierbar" style="background:rgba(255,90,71,.15);color:var(--p1)">
+      <span>${T().idk}</span><span>${T().nores}</span></div>
+      <div class="abody"><div class="lede">${v.msg}</div></div></div>`;
+    LAST=null; return;
+  }
+  const f=deriveFilters(q), hit=retrieve(f), blocked=gate(hit,f);
+  if(blocked) hit.street=null;
+  if(!hit.street&&!hit.category){
+    R.innerHTML=rail({tag:"① Input",lab:"in scope",st:"pass"},{tag:"② Retrieval",lab:"below floor",st:"stop"},
+      {tag:"③ Output",lab:"refused",st:"stop"});
+    O.innerHTML=`<div class="ans"><div class="tierbar" style="background:rgba(255,90,71,.15);color:var(--p1)">
+      <span>${T().idk}</span><span>${T().floor}</span></div>
+      <div class="abody"><div class="lede">${LANG==="es"?"No tengo una fuente fiable para eso todavía.":"I don't have a source I trust for that yet."}</div></div></div>`;
+    LAST=null; return;
+  }
+  const claims=buildAnswer(hit,f), s=hit.street, c=hit.category;
+  const lede=claims.find(x=>x.lede), rest=claims.filter(x=>x.text);
+  const cites=(s?s.c:c.c)||[], flagged=rest.some(r=>r.flag), pc=parcelFor(s?s.s:"");
+  R.innerHTML=rail({tag:"① Input",lab:"in scope",st:"pass"},
+    {tag:"② Retrieval",lab:blocked?"address withheld":(f.street?"street + category":"category"),st:blocked?"stop":"pass"},
+    {tag:"③ Output",lab:`${claims.length} claims bound`,st:"pass"});
+  O.innerHTML=`<div class="ans">
+    <div class="tierbar" style="background:${flagged?"rgba(255,162,41,.15)":"var(--blue-bg)"};color:${flagged?"var(--p2)":"var(--blue)"}">
+      <span>${flagged?T().flag:T().ok}</span><span>${T().src(cites.length)}</span></div>
+    <div class="abody">
+      <div class="lede">${lede?lede.lede:""}</div>
+      ${rest.map(r=>`<p class="sub">${r.text}</p>`).join("")}
+      <details open><summary>${T().record}</summary><div class="dbody">${bars(s||c)}</div></details>
+      ${pc?`<details><summary>${T().ctx}</summary><div class="dbody"><p style="margin:0">${T().parcel(pc)}</p>
+        <p style="margin:0;font-size:12px;color:var(--muted)">${T().psrc}</p></div></details>`:""}
+      ${cites.length?`<details><summary>${T().check(cites.length)}</summary><div class="dbody"><div class="cites">
+        ${cites.map(id=>`<a class="cite" href="https://311.boston.gov/reports/${id}" target="_blank" rel="noopener">#${id}</a>`).join("")}
+        </div><p style="margin:0;font-size:12.5px">${T().citen}</p></div></details>`:""}
+      <details><summary>${T().cant}</summary><div class="dbody"><p style="margin:0">${T().cantb}</p></div></details>
+    </div>
+    <div class="prov">${T().prov}</div>
+    <div class="acts"><button id="speak">${T().read}</button><button id="share">${T().share}</button></div>
+  </div>`;
+  LAST={q,lede:lede?lede.lede.replace(/<[^>]+>/g,""):"",rest:rest.map(r=>r.text)};
+  document.getElementById("speak").onclick=speak;
+  document.getElementById("share").onclick=share;
+}
+function speak(){
+  if(!LAST||!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance([LAST.lede,...LAST.rest].join(" "));
+  u.rate=.97; u.lang=LANG==="es"?"es-US":"en-US"; speechSynthesis.speak(u);
+}
+function share(){
+  if(!LAST) return;
+  const text=`"${LAST.q}"\n\n${LAST.lede}\n${LAST.rest.join("\n")}\n\n— Street Signal · Boston 311, 2025`;
+  if(navigator.share) navigator.share({title:"Street Signal",text}).catch(()=>{});
+  else navigator.clipboard.writeText(text).then(()=>toast("Copied"));
+}
+
+/* --------------------------------------------------------------------------- */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+let rec=null; const micBtn=document.getElementById("mic");
+if(SR){ rec=new SR(); rec.lang="en-US"; rec.interimResults=false;
+  rec.onresult=e=>{micBtn.setAttribute("aria-pressed","false");ask(e.results[0][0].transcript);};
+  rec.onerror=rec.onend=()=>micBtn.setAttribute("aria-pressed","false");
+} else micBtn.disabled=true;
+micBtn.onclick=()=>{ if(!rec)return;
+  if(micBtn.getAttribute("aria-pressed")==="true"){rec.stop();return;}
+  micBtn.setAttribute("aria-pressed","true"); try{rec.start();}catch(e){micBtn.setAttribute("aria-pressed","false");}};
+
+function applyLang(){
+  const t=T();
+  document.getElementById("q").placeholder=t.ph;
+  document.getElementById("askBtn").textContent=t.ask;
+  document.getElementById("l_speak").textContent=t.speak;
+  document.getElementById("l_you").textContent=t.you;
+  document.getElementById("l_board").textContent=t.board;
+  document.getElementById("l_report").textContent=t.report;
+  document.getElementById("l_what").textContent=t.what;
+  document.getElementById("l_where").textContent=t.wheres;
+  fillTypes();
+  document.getElementById("l_backed").textContent=t.backed;
+  document.getElementById("l_filed").textContent=t.filed;
+  document.getElementById("l_streak").textContent=t.streak;
+  document.getElementById("l_ask").textContent=t.askh;
+  document.getElementById("l_maphint").textContent=t.maphint;
+  document.getElementById("legend").innerHTML=CATS.map(c=>
+    `<span class="key"><i style="background:${catColor(c.k)}"></i>${LANG==="es"?c.es:c.en}</span>`).join("");
+  renderFilters();
+  document.getElementById("chips").innerHTML=[
+    ["Rats · 328 Dartmouth St","There are rats behind my building on 328 Dartmouth St"],
+    ["Sidewalk · Beacon St","Is the broken sidewalk on Beacon St going to get fixed"],
+    ["Out of scope","What is my landlord's phone number"]
+  ].map(([l,q])=>`<button class="chip" data-q="${q.replace(/"/g,"&quot;")}">${l}</button>`).join("");
+  document.querySelectorAll("#chips .chip").forEach(b=>b.onclick=()=>ask(b.dataset.q));
+  if(rec) rec.lang=LANG==="es"?"es-US":"en-US";
+  renderMe();
+  if(LAST) ask(LAST.q);
+}
+document.querySelectorAll(".lang").forEach(b=>b.onclick=()=>{
+  LANG=b.dataset.lang;
+  document.querySelectorAll(".lang").forEach(x=>{const on=x.dataset.lang===LANG;
+    x.classList.toggle("on",on); x.setAttribute("aria-pressed",on?"true":"false");});
+  applyLang();
+});
+document.getElementById("theme").onclick=()=>{
+  const cur=document.documentElement.getAttribute("data-theme");
+  const next=cur==="light"?"dark":cur==="dark"?"light":
+    (matchMedia("(prefers-color-scheme:light)").matches?"dark":"light");
+  document.documentElement.setAttribute("data-theme",next);
+  M3.restyle(HOODS, visible());
+  renderFilters(); renderBoard();
+  document.getElementById("legend").innerHTML=CATS.map(c=>`<span class="key"><i style="background:${catColor(c.k)}"></i>${LANG==="es"?c.es:c.en}</span>`).join("");
+};
+document.getElementById("askBtn").onclick=()=>ask(document.getElementById("q").value);
+document.getElementById("q").addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();ask(e.target.value);}});
+document.querySelectorAll("#filters .f").forEach(b=>b.onclick=()=>{
+  FILTER=b.dataset.f;
+  document.querySelectorAll("#filters .f").forEach(x=>x.classList.toggle("on",x===b));
+  renderBoard(); drawMarkers();});
+document.getElementById("openReport").onclick=()=>
+  document.getElementById("reportForm").classList.toggle("open");
+document.getElementById("r_cancel").onclick=()=>
+  document.getElementById("reportForm").classList.remove("open");
+document.getElementById("r_submit").onclick=submitReport;
+
+fillTypes(); renderFilters(); applyLang(); renderMe(); renderBoard(); initMap();
+
+</script>

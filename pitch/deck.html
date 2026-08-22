@@ -1,0 +1,449 @@
+<meta charset="utf-8">
+<title>Street Signal — Pitch</title>
+<style>__FONTS__</style>
+<style>
+@page { size: 297mm 167mm; margin: 0; }   /* 16:9 landscape */
+
+:root{
+  --bg:#071620; --panel:#0D2432; --line:#1B4056; --sunk:#061119;
+  --ink:#EAF2F7; --ink2:#A8BFCE; --dim:#6E8899;
+  --blue:#37A2F0;
+  --c1:#E0574A; --c2:#4B87E8; --c3:#4FA85C; --c4:#B76BD9; --c5:#C1811F; --c6:#E85A93;
+  --fd:"Barlow Condensed",Impact,sans-serif;
+  --fb:"Inter",system-ui,sans-serif;
+  --fm:"IBM Plex Mono",monospace;
+}
+*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--fb);font-size:11pt;line-height:1.5}
+
+.slide{
+  width:297mm;height:167mm;padding:15mm 17mm;position:relative;overflow:hidden;
+  background:var(--bg);break-after:page;page-break-after:always;
+  display:flex;flex-direction:column;
+}
+.slide:last-child{break-after:auto;page-break-after:auto}
+
+.num{position:absolute;right:17mm;bottom:10mm;font-family:var(--fm);font-size:8pt;color:var(--dim);letter-spacing:.1em}
+.eyebrow{font-family:var(--fm);font-size:8.5pt;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);margin-bottom:5mm}
+h1{font-family:var(--fd);font-size:52pt;line-height:.94;letter-spacing:.01em;margin:0;text-transform:uppercase}
+h2{font-family:var(--fd);font-size:34pt;line-height:1.02;letter-spacing:.02em;margin:0 0 6mm;text-transform:uppercase}
+h2 em,h1 em{font-style:normal;color:var(--c1)}
+p{margin:0 0 3.5mm;max-width:62ch;color:var(--ink2)}
+p.big{font-size:14pt;line-height:1.45;color:var(--ink);max-width:52ch}
+strong{color:var(--ink);font-weight:600}
+.accent{color:var(--blue)}
+
+/* cover */
+.cover{justify-content:center;background:
+  radial-gradient(120% 90% at 78% 20%, rgba(55,162,240,.18), transparent 60%),
+  radial-gradient(90% 70% at 12% 88%, rgba(224,87,74,.14), transparent 62%), var(--bg)}
+.cover h1{font-size:76pt}
+.rule{height:3px;width:38mm;background:var(--c1);margin:7mm 0}
+.sub{font-size:13.5pt;color:var(--ink2);max-width:60ch}
+
+/* quote */
+.quote{font-family:var(--fd);font-size:40pt;line-height:1.08;letter-spacing:.01em;
+  color:var(--ink);max-width:22ch;text-transform:none}
+.attrib{font-family:var(--fm);font-size:9pt;color:var(--dim);margin-top:6mm;letter-spacing:.06em}
+
+/* hero stat */
+.heroline{display:flex;align-items:flex-end;gap:9mm;margin:4mm 0 6mm}
+.hero{font-family:var(--fd);font-size:104pt;line-height:.82;color:var(--c1);font-variant-numeric:tabular-nums}
+.herolab{font-family:var(--fm);font-size:9.5pt;line-height:1.65;color:var(--ink2);max-width:34ch;padding-bottom:4mm}
+
+/* stat row */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:4mm;margin-top:auto}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:3mm;padding:5mm}
+.stat b{display:block;font-family:var(--fd);font-size:28pt;line-height:1;font-variant-numeric:tabular-nums}
+.stat span{font-family:var(--fm);font-size:8pt;color:var(--dim);line-height:1.6;letter-spacing:.05em}
+.stat.f b{color:var(--c1)}
+
+/* two-column */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:11mm;flex:1;align-items:start}
+.cols.wide{grid-template-columns:1.15fr .85fr}
+
+/* pipeline */
+.pipe{display:flex;flex-direction:column;gap:2mm;font-family:var(--fm);font-size:9pt}
+.step{display:grid;grid-template-columns:8mm 1fr;gap:3mm;align-items:baseline;
+  background:var(--panel);border:1px solid var(--line);border-radius:2mm;padding:3mm 4mm}
+.step.g{border-color:var(--blue);background:rgba(55,162,240,.10)}
+.step.g b{color:var(--blue)}
+.step b{font-family:var(--fd);font-size:12pt;color:var(--dim)}
+.step i{font-style:normal;color:var(--ink2)}
+.step i u{text-decoration:none;color:var(--ink);font-weight:500}
+
+/* answer mock */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:3mm;overflow:hidden}
+.cardtop{padding:3mm 5mm;font-family:var(--fm);font-size:8pt;letter-spacing:.09em;text-transform:uppercase;
+  background:rgba(193,129,31,.16);color:var(--c5);display:flex;justify-content:space-between}
+.cardbody{padding:5mm}
+.cardlede{font-family:var(--fd);font-size:21pt;line-height:1.15;margin-bottom:3mm}
+.cardlede em{font-style:normal;color:var(--blue)}
+.cardline{font-size:10pt;color:var(--ink2);margin-bottom:2mm}
+.cardline.flag{color:var(--c5)}
+.cardfoot{padding:3mm 5mm;background:var(--sunk);border-top:1px solid var(--line);
+  font-family:var(--fm);font-size:7.5pt;color:var(--dim);line-height:1.6}
+
+/* rails */
+.rails{display:flex;gap:3mm;margin-top:4mm}
+.rail{flex:1;border:1px solid var(--line);border-radius:2mm;padding:3mm;background:var(--panel)}
+.rail b{display:block;font-family:var(--fm);font-size:7.5pt;letter-spacing:.08em;color:var(--dim);text-transform:uppercase}
+.rail i{font-style:normal;font-family:var(--fm);font-size:9pt;color:var(--c3)}
+.rail.stop i{color:var(--c1)}
+
+/* legend swatches */
+.cats{display:grid;grid-template-columns:1fr 1fr;gap:2.5mm 6mm;font-size:10pt;margin-top:2mm}
+.cat{display:flex;align-items:center;gap:3mm;color:var(--ink2)}
+.dot{width:3.4mm;height:3.4mm;border-radius:99px;flex:none}
+
+/* list */
+ul.clean{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3.5mm}
+ul.clean li{padding-left:6mm;position:relative;color:var(--ink2);font-size:10.5pt;max-width:56ch}
+ul.clean li::before{content:"";position:absolute;left:0;top:2.6mm;width:2.6mm;height:2.6mm;
+  background:var(--blue);border-radius:99px}
+ul.clean li b{color:var(--ink)}
+
+.note{font-family:var(--fm);font-size:8.5pt;color:var(--dim);line-height:1.7;
+  border-left:2px solid var(--line);padding-left:4mm;max-width:62ch}
+.kicker{font-family:var(--fd);font-size:19pt;color:var(--blue);margin-top:auto;text-transform:uppercase}
+table{width:100%;border-collapse:collapse;font-size:9.5pt}
+td,th{text-align:left;padding:2.6mm 3mm;border-bottom:1px solid var(--line)}
+th{font-family:var(--fm);font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+td.k{font-family:var(--fm);font-size:8.5pt;color:var(--blue);white-space:nowrap}
+td b{color:var(--ink)}
+
+/* tier slide */
+.tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:4mm;flex:1;align-content:start}
+.tier{background:var(--panel);border:1px solid var(--line);border-radius:3mm;
+  padding:3.6mm;display:flex;flex-direction:column;gap:2mm;border-top:3px solid var(--line)}
+.tier.a{border-top-color:var(--c1)} .tier.b{border-top-color:var(--c5)}
+.tier.c{border-top-color:var(--c2)} .tier.d{border-top-color:var(--dim)}
+.tname{font-family:var(--fd);font-size:15pt;line-height:1;letter-spacing:.02em;text-transform:uppercase}
+.tier.a .tname{color:var(--c1)} .tier.b .tname{color:var(--c5)}
+.tier.c .tname{color:var(--c2)} .tier.d .tname{color:var(--dim)}
+.twho{font-family:var(--fm);font-size:7.5pt;letter-spacing:.06em;color:var(--ink);text-transform:uppercase}
+.tcrit{font-size:8.3pt;line-height:1.4;color:var(--ink2);margin:0}
+.tbig{font-family:var(--fd);font-size:23pt;line-height:1;font-variant-numeric:tabular-nums;margin-top:auto}
+.tbiglab{font-family:var(--fm);font-size:7pt;color:var(--dim);line-height:1.5;letter-spacing:.04em}
+.tvol{font-family:var(--fm);font-size:7.5pt;color:var(--dim);border-top:1px solid var(--line);padding-top:2mm}
+.tests{display:grid;grid-template-columns:repeat(3,1fr);gap:5mm;margin-top:3mm;
+  border-top:1px solid var(--line);padding-top:3mm}
+.test{font-size:8pt;line-height:1.45;color:var(--ink2)}
+.test b{display:block;font-family:var(--fm);font-size:7.5pt;letter-spacing:.06em;
+  color:var(--blue);text-transform:uppercase;margin-bottom:1.5mm}
+
+</style>
+
+<!-- 1 ───────────────────────────────────────────── -->
+<section class="slide cover">
+  <div class="eyebrow">Boston · 311 open data · 2025</div>
+  <h1>Street<br><em>Signal</em></h1>
+  <div class="rule"></div>
+  <p class="sub">Every resident who reports a problem is left guessing whether they were
+  ignored or whether they were being unreasonable. We answer that question with the
+  city's own records — in one sentence, with receipts.</p>
+  <div class="num">01</div>
+</section>
+
+<!-- 2 ───────────────────────────────────────────── -->
+<section class="slide">
+  <div class="eyebrow">The problem</div>
+  <div class="cols" style="align-items:center">
+    <div>
+      <div class="quote">"Is it just me, or is my street being ignored?"</div>
+      <div class="attrib">— the question nobody can answer today</div>
+    </div>
+    <div>
+      <p class="big">You report the rats. Weeks later an email says <strong>Closed</strong>.
+      Nothing on your street has changed.</p>
+      <p>Two doubts follow, and both land as self-blame: <strong>is this normal for a
+      city?</strong> and <strong>did anything actually happen?</strong></p>
+      <p>The city knows both answers. It knows your case number, its deadline, your street's
+      whole history, and what "closed" really meant. <strong>You are the only party in the
+      transaction operating blind — and you're the one it's happening to.</strong></p>
+    </div>
+  </div>
+  <div class="num">02</div>
+</section>
+
+<!-- 3 ───────────────────────────────────────────── -->
+<section class="slide">
+  <div class="eyebrow">The doubt is well founded</div>
+  <div class="heroline">
+    <div class="hero">58,005</div>
+    <div class="herolab">CASES BOSTON CLOSED IN 2025 AS<br><strong style="color:#E0574A">"NOTED ONLY"</strong><br>
+      — recorded, with no fix logged</div>
+  </div>
+  <p class="big">That is the recorded moment a person was managed rather than helped.
+  It sits in a public file, and no resident has ever been shown it.</p>
+  <div class="stats">
+    <div class="stat f"><b>31.8%</b><span>MISSED THE CITY'S OWN DEADLINE</span></div>
+    <div class="stat f"><b>40.2%</b><span>OF VOLUME IS A REPEAT — SAME PLACE, SAME PROBLEM</span></div>
+    <div class="stat"><b>4.8h</b><span>MEDIAN CLOSE — THE FLATTERING NUMBER</span></div>
+    <div class="stat f"><b>90.8d</b><span>99TH PERCENTILE — WHERE PEOPLE ACTUALLY LIVE</span></div>
+  </div>
+  <div class="num">03</div>
+</section>
+
+<!-- 4 ───────────────────────────────────────────── -->
+<section class="slide">
+  <div class="eyebrow">Why nobody has built this</div>
+  <h2>The data is open,<br>and almost <em>unusable</em>.</h2>
+  <div class="cols">
+    <div>
+      <p class="big">There is no prose in it.</p>
+      <p>267,187 rows carry no description field — only short category codes. 2,982 distinct
+      titles exist, but the top thirty cover <strong>84.9%</strong> of every row, and one of
+      them is 60,641 identical strings.</p>
+      <p>Drop that into a vector index and you get sixty thousand copies of the same point.
+      Retrieval becomes a coin flip.</p>
+    </div>
+    <div>
+      <p class="big">And most of it isn't residents.</p>
+      <p><strong>57% of the file is city staff</strong> logging their own rounds. Skip that
+      filter and the app tells someone <em>"eleven neighbours reported this too"</em> when
+      seven were an inspector.</p>
+      <p class="note">That is the difference between solidarity and a warm lie — and it's the
+      one mistake this product cannot afford to make.</p>
+    </div>
+  </div>
+  <div class="num">04</div>
+</section>
+
+<!-- 5 ───────────────────────────────────────────── -->
+<section class="slide">
+  <div class="eyebrow">The answer</div>
+  <div class="cols wide" style="align-items:center">
+    <div class="card">
+      <div class="cardtop"><span>Worth pushing on</span><span>13 sources</span></div>
+      <div class="cardbody">
+        <div class="cardlede">No — <em>9 residents</em> reported rodent activity on
+          328 Dartmouth St in 2025.</div>
+        <div class="cardline">The city logged 4 more itself, on top of the resident reports.</div>
+        <div class="cardline">ISD is the department that handles these.</div>
+        <div class="cardline flag">12 of the cases there closed as "noted only" —
+          recorded, with no fix logged.</div>
+      </div>
+      <div class="cardfoot">288 properties on this street · typical one built 1890 ·
+        31% owner-occupied · 311 Service Requests + Property Assessment · through 31 Dec 2025</div>
+    </div>
+    <div>
+      <h2 style="font-size:26pt">Legitimacy<br>first.<br><em>Logistics<br>second.</em></h2>
+      <p>The opening sentence is the one that dissolves the shame. The department name,
+      the timeline, the parcel history — all of it comes after.</p>
+      <p class="note">Every figure traces to a real case ID that opens the city's own record.
+      Citations are bound from retrieved rows, so the model cannot invent one.</p>
+    </div>
+  </div>
+  <div class="num">05</div>
+</section>
+
+<!-- 6 ───────────────────────────────────────────── -->
+<section class="slide">
+  <div class="eyebrow">How it works</div>
+  <div class="cols wide">
+    <div class="pipe">
+      <div class="step g"><b>①</b><i><u>Classify intent</u> — out of scope or personal? refuse, never search</i></div>
+      <div class="step"><b>→</b><i>Hard filters — street · category · residents only, from <u>this turn only</u></i></div>
+      <div class="step"><b>→</b><i>Stage 1 — citywide category card</i></div>
+      <div class="step"><b>→</b><i>Stage 2 — street-level card inside that category</i></div>
+      <div class="step g"><b>②</b><i><u>Sensitivity gate</u> — address detail withheld unless asked for</i></div>
+      <div class="step"><b>→</b><i>Score floor — no match → "I don't have a source I trust"</i></div>
+      <div class="step g"><b>③</b><i><u>Output</u> — every claim bound to a field, or it isn't written</i></div>
+    </div>
+    <div>
+      <h2 style="font-size:24pt">Three guardrails,<br><em>visible on screen</em></h2>
+      <p>You can watch which one fired. Ask for a landlord's phone number and the input
+      guard blocks it <strong>before any search runs</strong>.</p>
+      <div class="rails">
+        <div class="rail stop"><b>① Input</b><i>blocked</i></div>
+        <div class="rail stop"><b>② Retrieval</b><i>never ran</i></div>
+        <div class="rail stop"><b>③ Output</b><i>refused</i></div>
+      </div>
+      <p class="note" style="margin-top:5mm">Being told nothing is honest beats being told
+      something plausible.</p>
+    </div>
+  </div>
+  <div class="num">06</div>
+</section>
+
+<!-- 7 ───────────────────────────────────────────── -->
+<section class="slide">
+  <div class="eyebrow">The priority board</div>
+  <h2>Boston's queue has <em>no severity field</em>.<br>We added one.</h2>
+  <div class="cols">
+    <div>
+      <p class="big">A rat infestation and a misplaced trash barrel enter the same queue,
+      with the same clock.</p>
+      <p>Our first ranking let parking enforcement — 22% of the whole file — bury everything
+      that can actually hurt someone. So crowd size goes through a log, and tier does
+      the work.</p>
+      <p><strong>Top 40 is now 24 safety + 16 habitability. Zero parking.</strong></p>
+      <p class="note">Backing counts start from the residents who really filed. An upvote
+      joins a number that already existed — not invented engagement.</p>
+    </div>
+    <div>
+      <table>
+        <tr><th>Tier</th><th>Share</th><th>Noted only</th><th>Who handles it</th></tr>
+        <tr><td class="k">P1 Safety</td><td>14.2%</td><td>19.8%</td><td><b>Human, now</b></td></tr>
+        <tr><td class="k">P2 Home</td><td>7.0%</td><td><b style="color:#E0574A">63.5%</b></td><td><b>Human, scheduled</b></td></tr>
+        <tr><td class="k">P3 Routine</td><td><b>74.6%</b></td><td>30.0%</td><td>System proposes, human approves</td></tr>
+        <tr><td class="k">P4 Admin</td><td>4.2%</td><td>7.8%</td><td>Fully automated</td></tr>
+      </table>
+      <p class="note" style="margin-top:5mm">78.8% of the queue is routine or transactional
+      — and it is choking the 21% that needs a person.</p>
+    </div>
+  </div>
+  <div class="num">07</div>
+</section>
+
+<!-- 8 ───────────────────────────────────────────── -->
+<section class="slide">
+  <div class="eyebrow">The four priority tiers</div>
+  <h2 style="font-size:23pt;margin-bottom:3mm">They answer one question:
+    <em>who should touch this?</em></h2>
+  <p style="margin:-1mm 0 4mm;font-size:9pt;max-width:none">Not <em>is this real</em> —
+    all 267,187 rows are real people. Nothing is discarded, only routed.</p>
+
+  <div class="tiers">
+    <div class="tier a">
+      <div class="tname">P1 · Safety</div>
+      <div class="twho">Human, now</div>
+      <p class="tcrit">Someone can be physically hurt and the harm is irreversible. A broken
+        sidewalk hurts nobody until it's a fractured hip.</p>
+      <div class="tbig" style="color:var(--c1)">83%</div>
+      <div class="tbiglab">OVERDUE ON "MAKE SAFE" — THE WORST CATEGORY IN THE FILE, AND 71% RESIDENT-FILED</div>
+      <div class="tvol">14.2% of volume · 15.0% open</div>
+    </div>
+
+    <div class="tier b">
+      <div class="tname">P2 · Home</div>
+      <div class="twho">Human, scheduled — with a return visit</div>
+      <p class="tcrit">It makes a home unlivable, it recurs, and one visit doesn't end it.
+        Nobody dies of rats — you just don't sleep, and don't tell the neighbours.</p>
+      <div class="tbig" style="color:var(--c5)">63.5%</div>
+      <div class="tbiglab">CLOSED "NOTED ONLY" vs A 30% BASELINE · RODENTS ALONE: 86%</div>
+      <div class="tvol">7.0% of volume · only 3.6% overdue</div>
+    </div>
+
+    <div class="tier c">
+      <div class="tname">P3 · Routine</div>
+      <div class="twho">System proposes, human approves in batch</div>
+      <p class="tcrit">Real, needs a decision — but repetitive enough that nobody should be
+        opening tickets one at a time.</p>
+      <div class="tbig" style="color:var(--c2)">74.6%</div>
+      <div class="tbiglab">OF THE WHOLE QUEUE · PARKING ALONE IS 60,641 CASES</div>
+      <div class="tvol">32.4% open · 36.3% overdue</div>
+    </div>
+
+    <div class="tier d">
+      <div class="tname">P4 · Admin</div>
+      <div class="twho">Fully automated, no human</div>
+      <p class="tcrit">Zero judgment. There is no decision to make — you either qualify for
+        a bin or you don't.</p>
+      <div class="tbig" style="color:var(--ink2)">10.5d</div>
+      <div class="tbiglab">MEDIAN FOR A RECYCLING BIN · 0.1% OPEN, 38.5% LATE</div>
+      <div class="tvol">4.2% of volume · 99% resident-filed</div>
+    </div>
+  </div>
+
+  <div class="tests">
+    <div class="test"><b>1 · If nobody acts?</b>Physical harm → P1. An unlivable home → P2.
+      Deterioration → P3. Mild annoyance → P4.</div>
+    <div class="test"><b>2 · How much judgment?</b>Discretion and site knowledge → P1/P2.
+      Repetitive discretion → P3. None → P4.</div>
+    <div class="test"><b>3 · Does one visit end it?</b>No → P2. That's why "return visit" is
+      in the definition, not an implementation note.</div>
+  </div>
+
+  <p class="note" style="margin-top:3mm;margin-bottom:0;max-width:none;font-size:7.4pt">These assignments are
+    ours, not the city's — the schema carries no severity field, and that absence is the
+    finding. The boundaries are a judgment call: <strong style="color:#A8BFCE">Encampments
+    sits awkwardly in P2</strong>, since depending on what's reported it is as much a P1
+    safety question.</p>
+  <div class="num">08</div>
+</section>
+
+<!-- 9 ───────────────────────────────────────────── -->
+<section class="slide">
+  <div class="eyebrow">The map is the argument</div>
+  <h2>You see what's being ignored<br><em>before you read a word</em>.</h2>
+  <div class="cols">
+    <div>
+      <ul class="clean">
+        <li><b>Pin height is priority.</b> The skyline shows you the backlog.</li>
+        <li><b>Ground ring is how many neighbours</b> reported the same thing.</li>
+        <li><b>Colour is what kind of problem</b> — six categories, not 155 city codes.</li>
+        <li><b>Click any pin</b> and it opens the answer for that street.</li>
+      </ul>
+      <p class="note" style="margin-top:6mm">Colours were checked with a colour-blindness
+      validator in light and dark. Eight categories failed; six pass every test. Colour is
+      never the only signal — everything carries its name too.</p>
+    </div>
+    <div>
+      <div class="cats">
+        <div class="cat"><span class="dot" style="background:var(--c1)"></span>Pests &amp; rodents</div>
+        <div class="cat"><span class="dot" style="background:var(--c2)"></span>Streets &amp; sidewalks</div>
+        <div class="cat"><span class="dot" style="background:var(--c3)"></span>Trash &amp; dumping</div>
+        <div class="cat"><span class="dot" style="background:var(--c4)"></span>Lights &amp; signals</div>
+        <div class="cat"><span class="dot" style="background:var(--c5)"></span>Housing conditions</div>
+        <div class="cat"><span class="dot" style="background:var(--c6)"></span>Vehicles &amp; parking</div>
+      </div>
+      <p class="note" style="margin-top:7mm">Three.js, extruded from the city's own
+      neighbourhood GeoJSON. <strong style="color:#EAF2F7">No tile server, no map
+      vendor, no network.</strong></p>
+    </div>
+  </div>
+  <div class="num">09</div>
+</section>
+
+<!-- 9 ───────────────────────────────────────────── -->
+<section class="slide">
+  <div class="eyebrow">What it costs to run</div>
+  <h2>One HTML file.<br><em>Nothing else.</em></h2>
+  <div class="cols wide">
+    <div>
+      <table>
+        <tr><th>Layer</th><th>What it is</th></tr>
+        <tr><td class="k">Data</td><td>8,898 cards from 267,187 rows, 58 streets of parcel facts, 26 polygons — baked in</td></tr>
+        <tr><td class="k">Retrieval</td><td>Plain JavaScript. Filters → two stages → gate → floor</td></tr>
+        <tr><td class="k">Answer</td><td>Assembled from counted fields, never generated</td></tr>
+        <tr><td class="k">Map</td><td>Three.js from city GeoJSON — no tile server</td></tr>
+        <tr><td class="k">State</td><td>localStorage — votes, reports, points</td></tr>
+        <tr><td class="k">LLM</td><td>Granite 3.1 8B on local Ollama, optional, keyword fallback</td></tr>
+      </table>
+    </div>
+    <div>
+      <p class="big">The build step is offline: a Python script rolls 267,000 coded rows into
+      readable cards in about <strong>four seconds, with zero model calls</strong>.</p>
+      <p class="note">No server. No API keys. No per-query cost. On dead conference wifi,
+      on a bus, in a basement apartment — it still answers.</p>
+      <div class="kicker">Serving cost:<br>a static file.</div>
+    </div>
+  </div>
+  <div class="num">10</div>
+</section>
+
+<!-- 10 ──────────────────────────────────────────── -->
+<section class="slide">
+  <div class="eyebrow">The honest limits</div>
+  <div class="cols">
+    <div>
+      <ul class="clean">
+        <li><b>Granite runs locally only.</b> Published, it falls back to keyword classification.
+          The prose is assembled from fields either way — which is why citations can't drift.</li>
+        <li><b>Property Assessment covers 58 streets</b>, not all of Boston. Their API caps at
+          32,000 rows and blocks <span style="font-family:var(--fm);font-size:9pt">NULLIF</span>.</li>
+        <li><b>Approximate street matches say so.</b> "Beacon St" can land on a nearby
+          intersection; the answer flags it rather than passing off another street's numbers as yours.</li>
+        <li><b>Reports stay on the device.</b> It's a community signal, not a filing with the
+          City — real reports still go to 311.</li>
+      </ul>
+    </div>
+    <div style="display:flex;flex-direction:column;justify-content:center">
+      <div class="quote" style="font-size:32pt">Stop shouting into a void.<br>Start being someone <em style="color:var(--blue)">with a case</em>.</div>
+      <div class="attrib">Street Signal · built on Analyze Boston open data</div>
+    </div>
+  </div>
+  <div class="num">11</div>
+</section>

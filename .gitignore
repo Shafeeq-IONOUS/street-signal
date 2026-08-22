@@ -1,0 +1,18 @@
+# Source data — 146 MB, well over GitHub's 100 MB limit.
+# Rebuild it with:  make data   (see README)
+data_311_2025.csv
+hoods_raw.geojson
+prop_raw.json
+geo_url.txt
+gf.css
+want_streets.txt
+
+# Generated corpus — 16 MB, rebuilt in ~4s by cards/build_cards.py
+cards/corpus.jsonl
+
+# Build scratch
+app/probe.html
+app/shell.html
+pitch/deck_built.html
+pitch/check.html
+.DS_Store
