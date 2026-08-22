@@ -544,10 +544,20 @@ const TOPICS=[[/\b(rat|rats|rodent|mice|mouse)\b/i,"Rodent Activity"],
 const STREET_RE=/\b((?:INTERSECTION\s+)?(?:\d+[-\da-z]*\s+)?[A-Z][A-Za-z.]*(?:\s+[A-Z][A-Za-z.]*)?\s+(?:St|Street|Ave|Avenue|Rd|Road|Ln|Lane|Dr|Drive|Blvd|Way|Ct|Pl|Ter|Sq|Row|Park|Hwy|Whf)\.?)\b/;
 function deriveFilters(q){
   const t=TOPICS.find(x=>x[0].test(q));
-  const m=q.match(STREET_RE);
+  // Speech-to-text sometimes returns everything lowercase, and the street pattern
+  // keys off capitals. Try the text as spoken, then title-cased.
+  let m=q.match(STREET_RE);
+  if(!m) m=q.replace(/\b[a-z]/g,ch=>ch.toUpperCase()).match(STREET_RE);
   return {title:t?t[1]:null, street:m?m[1].replace(/\.$/,"").trim():null};
 }
 const norm=s=>(s||"").toLowerCase().replace(/[.,]/g,"").replace(/\s+/g," ").trim();
+const SUFFIX={street:"st",avenue:"ave",road:"rd",drive:"dr",lane:"ln",boulevard:"blvd",
+  court:"ct",place:"pl",terrace:"ter",square:"sq",highway:"hwy",parkway:"pkwy",wharf:"whf"};
+function skey(s){
+  let t=norm(s).replace(/^intersection /,"").replace(/^[0-9][0-9a-z-]*\s+/,"").split(" & ")[0].trim();
+  return t.replace(/\b(street|avenue|road|drive|lane|boulevard|court|place|terrace|square|highway|parkway|wharf)\b/g,
+                   m=>SUFFIX[m]).trim();
+}
 function retrieve(f){
   let category=null,street=null;
   if(f.title) category=CARDS.find(c=>c.k===1&&c.t===f.title)||null;
@@ -557,7 +567,10 @@ function retrieve(f){
     const exact=pool.find(c=>norm(c.s)===want);
     if(exact) street={...exact,approx:false};
     else{
-      const near=pool.filter(c=>norm(c.s).includes(want)||want.includes(norm(c.s))).sort((a,b)=>b.r-a.r);
+      const key=skey(f.street);
+      let near=pool.filter(c=>skey(c.s)===key);
+      if(!near.length) near=pool.filter(c=>norm(c.s).includes(want)||want.includes(norm(c.s)));
+      near.sort((a,b)=>b.r-a.r);
       if(near.length) street={...near[0],approx:true,alts:near.length};
     }
   }
