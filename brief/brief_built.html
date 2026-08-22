@@ -1,0 +1,274 @@
+<meta charset="utf-8">
+<title>Street Signal — Concept Brief</title>
+<style>@font-face{font-family:'Barlow Condensed';font-style:normal;font-weight:600;font-display:block;src:url('../pitch/fonts/BarlowCondensed-600.woff2') format('woff2');}
+@font-face{font-family:'Barlow Condensed';font-style:normal;font-weight:700;font-display:block;src:url('../pitch/fonts/BarlowCondensed-700.woff2') format('woff2');}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:block;src:url('../pitch/fonts/IBMPlexMono-400.woff2') format('woff2');}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:block;src:url('../pitch/fonts/IBMPlexMono-500.woff2') format('woff2');}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:block;src:url('../pitch/fonts/Inter-400.woff2') format('woff2');}
+@font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:block;src:url('../pitch/fonts/Inter-500.woff2') format('woff2');}
+@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:block;src:url('../pitch/fonts/Inter-600.woff2') format('woff2');}
+@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:block;src:url('../pitch/fonts/Inter-700.woff2') format('woff2');}</style>
+<style>
+@page { size: Letter; margin: 17mm 18mm 15mm; }
+
+:root{
+  --ink:#0B1F2C; --ink2:#3B5266; --dim:#6E8497; --rule:#C9D4DC; --soft:#E3EAEF;
+  --paper:#FFFFFF; --panel:#F3F7F9;
+  --blue:#1B6FB5; --red:#C0392B; --gold:#96620F;
+  --c1:#C0392B; --c2:#2A62B8; --c3:#2E7D46; --c4:#8E44AD; --c5:#96620F; --c6:#B32A63;
+  --fd:"Barlow Condensed",Impact,sans-serif;
+  --fb:"Inter",system-ui,sans-serif;
+  --fm:"IBM Plex Mono",monospace;
+}
+*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--fb);font-size:10.2pt;line-height:1.58}
+
+h1,h2,h3{font-family:var(--fd);margin:0;text-wrap:balance}
+p{margin:0 0 3.5mm;max-width:70ch;color:var(--ink2)}
+strong{color:var(--ink);font-weight:600}
+em{font-style:italic}
+
+/* masthead */
+.top{border-bottom:2.5pt solid var(--ink);padding-bottom:6mm;margin-bottom:8mm}
+.kick{font-family:var(--fm);font-size:8pt;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--blue);margin-bottom:4mm}
+h1{font-size:44pt;line-height:.94;text-transform:uppercase;letter-spacing:.01em}
+h1 em{font-style:normal;color:var(--red)}
+.oneline{font-size:13pt;line-height:1.42;color:var(--ink);max-width:56ch;margin-top:5mm;font-weight:500}
+
+/* sections */
+section{margin-bottom:7mm;break-inside:avoid-page}
+.eyebrow{font-family:var(--fm);font-size:8pt;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--dim);display:flex;align-items:center;gap:4mm;margin-bottom:3mm}
+.eyebrow::after{content:"";flex:1;height:.6pt;background:var(--rule)}
+h2{font-size:19pt;line-height:1.1;text-transform:uppercase;letter-spacing:.02em;margin-bottom:3.5mm}
+h2 em{font-style:normal;color:var(--red)}
+
+.pull{font-family:var(--fd);font-size:19pt;line-height:1.22;color:var(--ink);
+  border-left:3pt solid var(--red);padding-left:5mm;margin:5mm 0;max-width:40ch;text-transform:none}
+.pull.blue{border-left-color:var(--blue)}
+
+ul.q{margin:0 0 4mm;padding:0;list-style:none;display:flex;flex-direction:column;gap:3mm}
+ul.q li{padding-left:6mm;position:relative;color:var(--ink2);max-width:66ch}
+ul.q li::before{content:"";position:absolute;left:0;top:2.3mm;width:2.4mm;height:2.4mm;
+  border-radius:99px;background:var(--blue)}
+ul.q li b{color:var(--ink)}
+
+/* evidence table */
+table{width:100%;border-collapse:collapse;font-size:9.6pt;margin:1mm 0 3mm}
+td,th{text-align:left;padding:2.4mm 3mm;border-bottom:.7pt solid var(--soft);vertical-align:baseline}
+th{font-family:var(--fm);font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--dim);border-bottom:1pt solid var(--ink)}
+td.n{font-family:var(--fd);font-size:17pt;color:var(--red);white-space:nowrap;
+  font-variant-numeric:tabular-nums;width:26mm;line-height:1}
+td.k{font-family:var(--fm);font-size:8.5pt;color:var(--blue);white-space:nowrap}
+td b{color:var(--ink)}
+td.hot b{color:var(--red)}
+
+/* answer card */
+.card{border:.8pt solid var(--rule);border-radius:2.5mm;overflow:hidden;margin:3mm 0 4mm;
+  break-inside:avoid}
+.cardtop{background:rgba(150,98,15,.12);color:var(--gold);padding:2.4mm 4mm;
+  font-family:var(--fm);font-size:7.5pt;letter-spacing:.09em;text-transform:uppercase;
+  display:flex;justify-content:space-between}
+.cardbody{padding:4mm}
+.cardlede{font-family:var(--fd);font-size:17pt;line-height:1.18;margin-bottom:2.5mm}
+.cardlede em{font-style:normal;color:var(--blue)}
+.cardline{font-size:9.6pt;color:var(--ink2);margin-bottom:1.5mm}
+.cardline.flag{color:var(--gold)}
+
+.commit{display:grid;grid-template-columns:1fr;gap:3mm}
+.c{border-left:2.5pt solid var(--blue);padding-left:5mm}
+.c b{display:block;font-family:var(--fd);font-size:13pt;text-transform:uppercase;
+  letter-spacing:.02em;margin-bottom:1mm}
+.c p{margin:0;font-size:9.8pt}
+
+.note{font-family:var(--fm);font-size:8.3pt;line-height:1.65;color:var(--dim);
+  background:var(--panel);border-radius:2mm;padding:4mm 5mm;max-width:none}
+.note strong{color:var(--ink2)}
+
+.cats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2mm 5mm;font-size:9pt;margin-top:2mm}
+.cat{display:flex;align-items:center;gap:2.5mm;color:var(--ink2)}
+.dot{width:3mm;height:3mm;border-radius:99px;flex:none}
+
+ul.lim{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:2.6mm}
+ul.lim li{padding-left:5mm;position:relative;color:var(--ink2);font-size:9.6pt;max-width:68ch}
+ul.lim li::before{content:"—";position:absolute;left:0;color:var(--dim)}
+ul.lim li b{color:var(--ink)}
+
+footer{margin-top:9mm;padding-top:4mm;border-top:.7pt solid var(--rule);
+  font-family:var(--fm);font-size:7.6pt;line-height:1.7;color:var(--dim)}
+.brk{break-before:page;page-break-before:always}
+</style>
+
+<div class="top">
+  <div class="kick">Concept brief · Boston · August 2026</div>
+  <h1>Street<br><em>Signal</em></h1>
+  <p class="oneline">A resident asks whether their street is being ignored, and gets a
+  straight answer from the city's own records — in one sentence, with receipts.</p>
+</div>
+
+<section>
+  <div class="eyebrow">Who it's for</div>
+  <p>Not "citizens." Someone who has <strong>already reported the problem</strong>, probably
+  more than once, and is now sitting with the feeling that it didn't matter.</p>
+  <p><strong>They are not looking for data. They are looking for a verdict on themselves.</strong></p>
+</section>
+
+<section>
+  <div class="eyebrow">The problem, precisely</div>
+  <p>You report the rats. Weeks later an email says <strong>Closed</strong>. Nothing on your
+  street has changed. Two doubts follow, and both land as self-blame:</p>
+  <ul class="q">
+    <li><b>"Is this normal for a city, or is my block being skipped?"</b> With no basis for
+      comparison you can't tell, so the doubt lands on you. You start to wonder if you're
+      the difficult one.</li>
+    <li><b>"Did anything actually happen, or was I just handled?"</b></li>
+  </ul>
+  <p>Underneath both sits an information asymmetry that is close to total. The city knows
+  your case number, its deadline, your street's whole history, who else reported it, and
+  what "closed" actually meant. You know none of it.</p>
+  <div class="pull">You are the only party in the transaction operating blind — and you are
+  the one it is happening to.</div>
+</section>
+
+<section>
+  <div class="eyebrow">What they want to feel</div>
+  <p><strong>Legitimacy.</strong> <em>"Nine other people on this street reported the same
+  thing. I'm not being difficult — I'm right to be annoyed."</em> Being validated by
+  evidence is the emotional payoff, and it has to land before any useful information does.</p>
+  <p><strong>Agency.</strong> Knowing what the city calls this in its own system, who owns
+  it, what the real timeline looks like on <em>your</em> street rather than the citywide
+  average, and what the next actual step is.</p>
+  <div class="pull blue">Stop shouting into a void.<br>Start being someone with a case.</div>
+</section>
+
+<section>
+  <div class="eyebrow">The evidence that they're right</div>
+  <p>Computed from Boston's 2025 311 export — 267,187 records.</p>
+  <table>
+    <tr><td class="n">58,005</td><td>cases closed as <b>"noted only"</b> — recorded, no fix
+      logged. 29.7% of everything closed.</td></tr>
+    <tr><td class="n">31.8%</td><td>missed the city's own deadline</td></tr>
+    <tr><td class="n">40.2%</td><td>of all volume is a repeat — same address, same problem,
+      filed again</td></tr>
+    <tr><td class="n" style="color:var(--ink2)">4.8 h</td><td>median close time — the number
+      that makes the city look responsive</td></tr>
+    <tr><td class="n">90.8 d</td><td>99th percentile — where people actually live, and nobody
+      tells you which half you're in</td></tr>
+  </table>
+  <p>The answer to <em>"is it just me?"</em> is usually <strong>no, and here's the
+  proof</strong> — and that proof is public, and no resident can get at it.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Why nobody has built it</div>
+  <p><strong>There is no prose in the data.</strong> 267,187 rows carry no description field,
+  only short category codes. 2,982 distinct titles exist, but the top thirty cover
+  <strong>84.9%</strong> of every row, and one of them is 60,641 identical strings. Drop that
+  into a vector index and you get sixty thousand copies of the same point.</p>
+  <p><strong>And most of it isn't residents.</strong> 57% of the file is city staff logging
+  their own rounds. Skip that filter and the product tells someone <em>"eleven neighbours
+  reported this too"</em> when seven were an inspector — inventing exactly the solidarity it
+  exists to provide honestly.</p>
+</section>
+
+<section class="brk">
+  <div class="eyebrow">The product</div>
+  <h2>Legitimacy first.<br><em>Logistics second.</em></h2>
+  <p>Ask in plain language, typed or spoken. Get back a calm sentence, then layers on demand.</p>
+  <div class="card">
+    <div class="cardtop"><span>Worth pushing on</span><span>13 sources</span></div>
+    <div class="cardbody">
+      <div class="cardlede">No — <em>9 residents</em> reported rodent activity on
+        328 Dartmouth St in 2025.</div>
+      <div class="cardline">The city logged 4 more itself, on top of the resident reports.</div>
+      <div class="cardline">ISD is the department that handles these.</div>
+      <div class="cardline flag">12 of the cases there closed as "noted only" — recorded,
+        with no fix logged.</div>
+    </div>
+  </div>
+  <p><strong>One map.</strong> Boston in 3D, every issue a pin. Height is priority, ground
+  ring is how many neighbours, colour is what kind of problem. You read the backlog before
+  you read a word.</p>
+  <div class="cats">
+    <div class="cat"><span class="dot" style="background:var(--c1)"></span>Pests &amp; rodents</div>
+    <div class="cat"><span class="dot" style="background:var(--c2)"></span>Streets &amp; sidewalks</div>
+    <div class="cat"><span class="dot" style="background:var(--c3)"></span>Trash &amp; dumping</div>
+    <div class="cat"><span class="dot" style="background:var(--c4)"></span>Lights &amp; signals</div>
+    <div class="cat"><span class="dot" style="background:var(--c5)"></span>Housing conditions</div>
+    <div class="cat"><span class="dot" style="background:var(--c6)"></span>Vehicles &amp; parking</div>
+  </div>
+  <p style="margin-top:4mm"><strong>One board.</strong> Neighbours back the issues that
+  matter, ranked by consequence rather than volume.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Three commitments</div>
+  <div class="commit">
+    <div class="c"><b>It refuses out loud</b>
+      <p>Ask for a landlord's phone number and the input guard blocks it <em>before any
+      search runs</em>. Ask something outside the data and it says "I don't have a source I
+      trust for that." Being told nothing is honest beats being told something plausible.</p></div>
+    <div class="c"><b>Citations are bound, never written</b>
+      <p>They come from the rows that were actually retrieved, so a model cannot
+      fabricate one.</p></div>
+    <div class="c"><b>Neighbours are counted separately from staff</b>
+      <p>"Nine residents reported this; the city logged six more itself" is a better
+      sentence than either number alone.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">The severity field the city doesn't have</div>
+  <p>Boston's schema carries no priority signal at all. A rat infestation and a misplaced
+  recycling bin enter the same queue with the same clock.</p>
+  <table>
+    <tr><th>Tier</th><th>Share</th><th>Noted only</th><th>Who should touch it</th></tr>
+    <tr><td class="k">P1 · Safety</td><td>14.2%</td><td>19.8%</td><td><b>Human, now</b></td></tr>
+    <tr><td class="k">P2 · Home</td><td>7.0%</td><td class="hot"><b>63.5%</b></td><td><b>Human, scheduled, with a return visit</b></td></tr>
+    <tr><td class="k">P3 · Routine</td><td><b>74.6%</b></td><td>30.0%</td><td>System proposes, human approves in batch</td></tr>
+    <tr><td class="k">P4 · Admin</td><td>4.2%</td><td>7.8%</td><td>Fully automated</td></tr>
+  </table>
+  <p><strong>78.8% of the queue is routine or transactional, and it is choking the 21% that
+  needs a person.</strong> P2 — the tier with the deepest human stakes — has the <em>best</em>
+  deadline performance in the city, because it is closed without being acted on. Speed there
+  is the symptom, not the achievement.</p>
+  <p>Halving that 63.5% dismissal rate costs 7% of capacity and would change how Boston
+  feels to live in more than anything else on the list.</p>
+</section>
+
+<section>
+  <div class="eyebrow">What it costs to run</div>
+  <p><strong>One HTML file.</strong> No server, no API keys, no per-query cost, no network at
+  runtime. The build step is offline — a Python script rolls 267,000 coded rows into readable
+  cards in about four seconds with zero model calls.</p>
+  <p>On dead conference wifi, on a bus, in a basement apartment, it still answers.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Honest limits</div>
+  <div class="note">
+    <ul class="lim">
+      <li><b>The local model is optional.</b> Granite 3.1 8B classifies free-text reports when
+        it's reachable; otherwise a keyword router takes over and the interface says which one
+        decided. The prose is assembled from counted fields either way.</li>
+      <li><b>Property Assessment covers 58 streets</b>, not all of Boston — the city's API
+        caps at 32,000 rows.</li>
+      <li><b>Approximate street matches say so</b> rather than passing another street's
+        numbers off as yours.</li>
+      <li><b>Reports stay on the device.</b> A community signal, not a filing. Real reports
+        still go to 311.</li>
+      <li><b>The tier boundaries are ours, not the city's.</b> That absence is the finding,
+        but the boundaries are a judgment call — Encampments in particular sits awkwardly in P2.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  Unofficial community tool. Built on Analyze Boston open data — 311 Service Requests,
+  Property Assessment, and BPDA Neighborhood Boundaries. Not affiliated with the City of Boston.<br>
+  Every figure independently computed from the 2025 311 extract, 267,187 rows, verified
+  against the CKAN API row count.
+</footer>
